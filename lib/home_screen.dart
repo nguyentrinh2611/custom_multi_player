@@ -6,16 +6,18 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const MediaPlayer(),
-              ));
-        },
-        child: Text('On press'),
+    return Scaffold(
+      body: Center(
+        child: GestureDetector(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MediaPlayer(),
+                ));
+          },
+          child: const Text('On press'),
+        ),
       ),
     );
   }

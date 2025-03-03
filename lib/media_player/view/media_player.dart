@@ -1,9 +1,5 @@
-import 'package:demo_player/documents/docs.dart';
 import 'package:demo_player/media_player/controller/custom_player.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
@@ -19,7 +15,6 @@ class _MyWidgetState extends State<MediaPlayer> {
   List<WebViewController> webViewController = [];
   PageController controller = PageController();
   List<String> urls = ['-25y8Yu1vi4', 'vG0TQeiGHDQ'];
-  late final WebViewController _controller;
 
   @override
   void initState() {
@@ -27,19 +22,6 @@ class _MyWidgetState extends State<MediaPlayer> {
     _initPlayer();
   }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _initPlayer();
-  // }
-  // _initPlayer() {
-  //   List.generate(urls.length, (index) {
-  //     webViewController.add(WebViewController.fromPlatformCreationParams(
-  //         const PlatformWebViewControllerCreationParams())
-  //       ..loadHtmlString(iframeHTML(urls[0]))
-  //       ..setJavaScriptMode(JavaScriptMode.unrestricted));
-  //   });
-  // }
   _initPlayer() {
     List.generate(
       urls.length,
@@ -52,24 +34,6 @@ class _MyWidgetState extends State<MediaPlayer> {
       },
     );
   }
-
-  // Future<void> openYouTubeVideo(String videoId) async {
-  //   await launchUrl(Uri.parse('https://www.youtube.com/watch?v=$videoId'),
-  //       mode: LaunchMode.externalApplication);
-  //   // final Uri url = Uri.parse('vnd.youtube://$videoId'); // Opens in YouTube app
-  //   // if (!await launchUrl(url)) {
-  //   //   await launchUrl(Uri.parse('https://www.youtube.com/watch?v=$videoId'),
-  //   //       mode: LaunchMode.externalApplication);
-  //   // }
-  // }
-
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   for (var controller in controllers) {
-  //     controller.dispose();
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -86,20 +50,6 @@ class _MyWidgetState extends State<MediaPlayer> {
           itemCount: urls.length,
           onPageChanged: (value) {},
           itemBuilder: (context, index) {
-            // return WebViewWidget(
-            //   controller: webViewController[index],
-            //   gestureRecognizers: {Factory(() => EagerGestureRecognizer())},
-            // );
-            // return YoutubePlayerScaffold(
-            //     autoFullScreen: false,
-            //     enableFullScreenOnVerticalDrag: false,
-            //     builder: (context, player) {
-            //       return Column(
-            //         mainAxisAlignment: MainAxisAlignment.center,
-            //         children: [player],
-            //       );
-            //     },
-            //     controller: controllers[index].youtubeController!);
             return YoutubeValueBuilder(
               controller: controllers[index].youtubeController!,
               builder: (p0, p1) {
@@ -109,34 +59,6 @@ class _MyWidgetState extends State<MediaPlayer> {
                 );
               },
             );
-
-            // return !urls[index].contains('https')
-            //     ? YoutubePlayer(
-            //         onReady: () {
-            //           print('===================>');
-            //           controllers[index].play();
-            //         },
-            //         topActions: [],
-            //         bottomActions: [
-            //           const CurrentPosition(),
-            //           const ProgressBar(
-            //             isExpanded: true,
-            //           ),
-            //           GestureDetector(
-            //             onTap: () {
-            //               openYouTubeVideo(urls[index]);
-            //             },
-            //             child: Image.asset(
-            //               'assets/icon/youtube_logo.png',
-            //               width: 50,
-            //               height: 50,
-            //             ),
-            //           ),
-            //           const FullScreenButton()
-            //         ],
-            //         showVideoProgressIndicator: true,
-            //         controller: controllers[index].youtubeController!)
-            //     : VideoPlayer(controllers[index].videoController!);
           },
         ),
       ),
