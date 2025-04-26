@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:youtube_player_iframe/src/enums/player_state.dart';
 
 import '../controller/youtube_player_controller.dart';
 import '../helpers/youtube_value_builder.dart';
@@ -37,6 +38,7 @@ class YoutubePlayerScaffold extends StatefulWidget {
     this.backgroundColor,
     @Deprecated('Unused parameter. Use `YoutubePlayerParam.userAgent` instead.')
     this.userAgent,
+    required this.videoId,
   });
 
   /// Builds the child widget.
@@ -82,6 +84,9 @@ class YoutubePlayerScaffold extends StatefulWidget {
   /// By default `userAgent` is null.
   final String? userAgent;
 
+  /// VideoId for thumnail
+  final String videoId;
+
   @override
   State<YoutubePlayerScaffold> createState() => _YoutubePlayerScaffoldState();
 }
@@ -123,6 +128,9 @@ class _YoutubePlayerScaffoldState extends State<YoutubePlayerScaffold> {
                   fullscreenOrientations: widget.fullscreenOrientations,
                   lockedOrientations: widget.lockedOrientations,
                   fullScreenOption: value.fullScreenOption,
+                  videoId: widget.videoId,
+                  aspectRatio: widget.aspectRatio,
+                  controller: widget.controller,
                   child: Builder(
                     builder: (context) {
                       if (value.fullScreenOption.enabled) return player;
@@ -145,6 +153,9 @@ class _FullScreen extends StatefulWidget {
     required this.lockedOrientations,
     required this.child,
     required this.auto,
+    required this.videoId,
+    required this.aspectRatio,
+    required this.controller,
   });
 
   final FullScreenOption fullScreenOption;
@@ -153,6 +164,9 @@ class _FullScreen extends StatefulWidget {
   final List<DeviceOrientation> lockedOrientations;
   final Widget child;
   final bool auto;
+  final String videoId;
+  final double aspectRatio;
+  final YoutubePlayerController controller;
 
   @override
   State<_FullScreen> createState() => _FullScreenState();
@@ -161,6 +175,7 @@ class _FullScreen extends StatefulWidget {
 class _FullScreenState extends State<_FullScreen> with WidgetsBindingObserver {
   Orientation? _previousOrientation;
   bool canPop = false;
+  ValueNotifier<bool> isThumb = ValueNotifier<bool>(true);
 
   @override
   void initState() {
@@ -169,6 +184,12 @@ class _FullScreenState extends State<_FullScreen> with WidgetsBindingObserver {
     if (widget.auto) WidgetsBinding.instance.addObserver(this);
     SystemChrome.setPreferredOrientations(_deviceOrientations);
     SystemChrome.setEnabledSystemUIMode(_uiMode);
+
+    widget.controller.listen((event) {
+      if (event.playerState == PlayerState.playing && isThumb.value) {
+        isThumb.value = false;
+      }
+    });
   }
 
   @override
@@ -204,7 +225,41 @@ class _FullScreenState extends State<_FullScreen> with WidgetsBindingObserver {
     return PopScope(
       canPop: canPop,
       onPopInvokedWithResult: _handleFullScreenBackAction,
-      child: widget.child,
+      child: Stack(
+        alignment: AlignmentDirectional.center,
+        children: [
+          widget.child,
+          ValueListenableBuilder(
+              valueListenable: isThumb,
+              builder: (context, valueStart, child) {
+                return IgnorePointer(
+                  ignoring: !valueStart,
+                  child: AnimatedOpacity(
+                      duration: const Duration(milliseconds: 100),
+                      opacity: valueStart ? 1.0 : 0.0,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          AspectRatio(
+                            aspectRatio: widget.aspectRatio,
+                            child: Image.network(
+                              'https://img.youtube.com/vi/${widget.videoId}/hqdefault.jpg',
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container();
+                              },
+                            ),
+                          ),
+                          const CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 3,
+                          )
+                        ],
+                      )),
+                );
+              })
+        ],
+      ),
     );
   }
 

@@ -120,7 +120,7 @@ class YoutubePlayerParams {
     this.showControls = true,
     this.enableKeyboard = kIsWeb,
     this.enableJavaScript = true,
-    this.showFullscreenButton = false,
+    this.showFullscreenButton = true,
     this.interfaceLanguage = 'en',
     this.showVideoAnnotations = true,
     this.loop = false,

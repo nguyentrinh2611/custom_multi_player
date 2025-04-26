@@ -1,4 +1,4 @@
-import 'package:demo_player/media_player/view/media_player.dart';
+import 'package:custom_mutli_player/media_player/view/media_player.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {

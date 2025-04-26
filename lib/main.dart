@@ -1,4 +1,4 @@
-import 'package:demo_player/home_screen.dart';
+import 'package:custom_mutli_player/home_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {

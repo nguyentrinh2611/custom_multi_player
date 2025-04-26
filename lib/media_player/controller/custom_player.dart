@@ -1,22 +1,23 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:demo_player/media_player/controller/video_controller.dart';
+import 'package:custom_mutli_player/media_player/controller/video_controller.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class CustomPlayer {
   VideoController? videoController;
   YoutubePlayerController? youtubeController;
   bool isYoutube;
+  String url;
   CustomPlayer({
-    required String url,
+    required this.url,
     required bool youtube,
     bool enablePlayLoop = true,
     bool autoPlay = false,
     bool disableSound = false,
   }) : isYoutube = youtube {
     if (isYoutube) {
-      youtubeController =
-          YoutubePlayerController(params: const YoutubePlayerParams())
-            ..loadVideoById(videoId: url);
+      // youtubeController = YoutubePlayerController(
+      //     params: const YoutubePlayerParams(showFullscreenButton: true))
+      //   ..loadVideoById(videoId: url);
     } else {
       videoController = VideoController(
           url: url,
@@ -26,9 +27,15 @@ class CustomPlayer {
     }
   }
 
-  void initialize() {
+  void initialize() async {
     if (!isYoutube) {
       videoController?.initialize();
+    } else {
+      youtubeController = YoutubePlayerController(
+          params:
+              const YoutubePlayerParams(showFullscreenButton: true, loop: true))
+        ..loadVideoById(videoId: url);
+      await youtubeController?.pauseVideo();
     }
   }
 

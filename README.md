@@ -1,4 +1,4 @@
-# demo_player
+# custom_mutli_player
 
 A new Flutter project.
 
