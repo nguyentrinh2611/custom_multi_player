@@ -14,16 +14,12 @@ class CustomPlayer {
     bool autoPlay = false,
     bool disableSound = false,
   }) : isYoutube = youtube {
-    if (isYoutube) {
-      // youtubeController = YoutubePlayerController(
-      //     params: const YoutubePlayerParams(showFullscreenButton: true))
-      //   ..loadVideoById(videoId: url);
-    } else {
+    if (!youtube) {
       videoController = VideoController(
           url: url,
+          enablePlayLoop: enablePlayLoop,
           autoPlay: autoPlay,
-          disableSound: disableSound,
-          enablePlayLoop: enablePlayLoop);
+          disableSound: disableSound);
     }
   }
 
@@ -41,19 +37,19 @@ class CustomPlayer {
 
   void play() {
     if (isYoutube) {
+      youtubeController?.playVideo();
     } else {
       videoController?.play();
     }
   }
 
-  void pause() {
-    if (isYoutube) {
-    } else {
-      videoController?.pause();
-    }
+  Future<void> pause() async {
+    await youtubeController?.pauseVideo();
+    await videoController?.pause();
   }
 
-  void dispose() {
-    videoController?.dispose();
+  Future<void> dispose() async {
+    await youtubeController?.close();
+    await videoController?.dispose();
   }
 }
