@@ -1,4 +1,3 @@
-import 'package:custom_mutli_player/media_player/view/media_player.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -9,13 +8,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: GestureDetector(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const MediaPlayer(),
-                ));
-          },
+          onTap: () {},
           child: const Text('On press'),
         ),
       ),

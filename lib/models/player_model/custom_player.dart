@@ -1,5 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:custom_mutli_player/media_player/controller/video_controller.dart';
+import 'package:custom_mutli_player/models/player_model/video_controller.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class CustomPlayer {
